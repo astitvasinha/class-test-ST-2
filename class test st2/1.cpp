@@ -1,71 +1,80 @@
-// Astitva 2010990139 Set 2
-#include <bits/stdc++.h>  // header files included
+/*
+Name - Astitva Sinha
+roll No- 2010990139
+set - 02
+ */
+
+#include <bits/stdc++.h>
 using namespace std;
 
-long mean(vector<long> grades){ // function to calculate mean
+// func for mean
+long mean(vector<long> grades){
     return accumulate(begin(grades), end(grades), (long)0)/grades.size();
 }
 
-long median(vector<long> grades, int size){ // function to calculate median
-    sort(begin(grades), end(grades));   // sorting the grades using c++ STL sort algorithm.
-    
+//func for meadian
+long median(vector<long> grades, int size){
+    sort(begin(grades), end(grades));
+
     if(size % 2 != 0){
         return grades[size/2];
     }
-    
+
     int a = size/2;
     int b = a + 1;
-    
-    return (grades[a] + grades[b])/2; 
+
+    return (grades[a] + grades[b])/2;
 }
 
-pair<vector<string>, int> mode(vector<string> names, vector<long> grades){ 
-    unordered_map<int, int> freq;   // unodered map created.
-    
+//function for mode
+void mode(vector<string> names, vector<long> grades){
+    unordered_map<int, int> freq;
+
     for(int i=0; i<grades.size(); i++)
         freq[grades[i]]++;
-    
-    int key, val = 0;
-    for(auto& p: freq){
-        if(p.second > val)
-            key = p.first;
-    }
-    
-    pair<vector<string>, int> ans;
-    vector<string> studentsWithMode;
+
+    unordered_map<int, int> modes;
+    long highestFreq = 0;
     for(int i=0; i<grades.size(); i++){
-        if(grades[i] == freq[key])
-            studentsWithMode.push_back(names[i]);
+        if(freq[grades[i]] > highestFreq){
+            highestFreq = freq[grades[i]];
+            modes.clear();
+            modes[grades[i]]++;
+        }
+        else if(freq[grades[i]] == highestFreq){
+            modes[grades[i]]++;
+        }
     }
-    
-    return ans;
+
+    cout<<"students list with their mode: ";
+    for(int i=0; i<grades.size(); i++){
+        if(modes[grades[i]] > 0)
+            cout<<names[i]<<" "<<grades[i]<<" ";
+    }
+
 }
 
-int main()  // main function declared.
+int main()
 {
-    vector<string> names;   // vector for string declared
-    vector<long> grades;    // vector for grades declared
-    
-    int size;
+    vector<string> names; // vector for string
+    vector<long> grades; // vector for grades
+
+    int size;  //size
     cin>>size;
-    
+
     string name;
     int grade;
-    
+
     for(int i=0; i<size; i++){
-        cin>>name>>grade;
+        cin>>name>>grade; // input values
         names.push_back(name);
         grades.push_back(grade);
     }
-    
-    cout<<"mean: "<<mean(grades)<<endl; // printing the mean
-    cout<<"median: "<<median(grades, size)<<endl;   // printing the median
-    
-    pair<vector<string>, int> p = mode(names, grades);
-    cout<<"mode: "<<p.second<<endl<<"students with the mode ";
-    for(int i=0; p.first.size(); i++){
-        cout<<p.first[i]<<" ";
-    }
-        
+
+    cout<<"mean: "<<mean(grades)<<endl;
+    cout<<"median: "<<median(grades, size)<<endl;
+
+    mode(names, grades);
+
     return 0;
 }
